@@ -12,7 +12,7 @@ import {get as getProjection} from 'ol/proj';
 import {getWidth, getTopLeft} from 'ol/extent';
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
 import {defaults as defaultControls, Control, Attribution} from 'ol/control';
-import {bbox} from 'ol/loadingstrategy';
+import {all} from 'ol/loadingstrategy';
 import Geolocation from 'ol/Geolocation';
 import Feature from 'ol/Feature';
 
@@ -291,7 +291,6 @@ function loadGPXToMap(urls) {
           });
       }
       getAllData(urls).then(resps=>{
-        
         resps.forEach(function(resp) {
             gpxSource.addFeatures(gpxSource.getFormat().readFeatures(resp.data, {
               dataProjection: 'EPSG:4326',
@@ -302,7 +301,7 @@ function loadGPXToMap(urls) {
         console.log(e)
       })
      },
-     strategy: bbox
+     strategy: all
    });
   hikeLayer.setSource(gpxSource);
   hikeLayer.setStyle(function(feature, resolution) {
