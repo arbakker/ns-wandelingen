@@ -57,10 +57,11 @@ var SelectHikeControl = /*@__PURE__*/(function (Control) {
     var options = opt_options || {};
     var button = document.createElement('select');
     button.id = 'hikeSelect';
+    button.style = 'right:0.5em;top:0.5em; max-width: 100%;'
     var element = document.createElement('div');
     element.className = 'rotate-north ol-unselectable ol-control';
     element.appendChild(button);
-    element.style = 'right:0.5em;top:0.5em;'
+    element.style = 'right:0.5em;top:0.5em; max-width: 75%;'
 
     Control.call(this, {
       element: element,
