@@ -87,7 +87,7 @@ const labelStyle = new Style({
     offsetX: 4,
     offsetY: -4,
     textAlign: 'left', 
-    font: '12px Calibri,sans-serif',
+    font: '12px NS Sans,Segoe UI,Myriad,Verdana,sans-serif',
     overflow: true,
     fill: new Fill({
       color: '#000'
@@ -312,7 +312,8 @@ function loadGPXToMap(urls) {
     return [style[feature.getGeometry().getType()]];
   });
   hikeLayer.addEventListener('change', function(event) {
-    map.getView().fit(hikeLayer.getSource().getExtent(), (map.getSize()));
+    map.getView().fit(hikeLayer.getSource().getExtent());
+    hikeLayer.removeEventListener('change');
   });
 }
 
