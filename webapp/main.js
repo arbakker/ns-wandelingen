@@ -11,7 +11,7 @@ import WMTS from 'ol/source/WMTS';
 import {get as getProjection} from 'ol/proj';
 import {getWidth, getTopLeft} from 'ol/extent';
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
-import {defaults as defaultControls, Control} from 'ol/control';
+import {defaults as defaultControls, Control, Attribution} from 'ol/control';
 import {bbox} from 'ol/loadingstrategy';
 import Geolocation from 'ol/Geolocation';
 import Feature from 'ol/Feature';
@@ -27,8 +27,6 @@ for (let z = 0; z < 20; ++z) {
   resolutions[z] = size / Math.pow(2, z);
   matrixIds[z] = z;
 }
-
-
 
 
 
@@ -129,7 +127,7 @@ const style = {
 
 const tileLayer = new TileLayer({
   source: new WMTS({
-    attributions: 'Tiles © <a href="https://www.pdok.nl/introductie/-/article/basisregistratie-topografie-achtergrondkaarten-brt-a-' +
+    attributions: 'Tiles © <a target="_blank" href="https://www.pdok.nl/introductie/-/article/basisregistratie-topografie-achtergrondkaarten-brt-a-' +
         '">BRT-Achtergrondkaart PDOK</a>',
     url: 'https://geodata.nationaalgeoregister.nl/tiles/service/wmts',
     layer: 'brtachtergrondkaartgrijs',
@@ -271,6 +269,8 @@ function getEntryByUrl(data, url) {
 
 function loadGPXToMap(urls) {
   var gpxSource = new VectorSource({
+    attributions: 'Wandelroutes © <a target="_blank" href="https://www.ns.nl/dagje-uit/wandelen#/' +
+        '">NS Wandelingen</a>',
     format: new GPX(),
     loader: function() {
       async function getAllData(urls) {
@@ -291,6 +291,7 @@ function loadGPXToMap(urls) {
           });
       }
       getAllData(urls).then(resps=>{
+        
         resps.forEach(function(resp) {
             gpxSource.addFeatures(gpxSource.getFormat().readFeatures(resp.data, {
               dataProjection: 'EPSG:4326',
