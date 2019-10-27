@@ -19,3 +19,9 @@ cd webapp
 npm install
 npm start
 ```
+
+Voor production build, builds in `build/`:
+
+```
+npm run-script build 
+```
