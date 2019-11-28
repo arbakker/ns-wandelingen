@@ -1,6 +1,6 @@
 # NS Wandeling App
 
-Kaartviewer (web)applicatie voor het bekijken van de NS Wandelroutes op de kaart in de browser. 
+Kaart webapplicatie voor de NS Wandelroutes, zie: https://arbakker.github.io/ns-wandeling-app/.
 
 ## Disclaimer
 
