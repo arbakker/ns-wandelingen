@@ -6,22 +6,25 @@ Kaart webapplicatie voor de NS Wandelroutes, zie: https://arbakker.github.io/ns-
 
 Deze applicatie is op geen enkele wijze officieel door de NS goedgekeurd. Alle wandelroute informatie is afkomstig van de website van de [NS](https://www.ns.nl/dagje-uit/wandelen#/).
 
-## Start viewer lokaal (voor developers) 
-
-Vereisten:
-
-- npm
-
-Start lokaal met:
-
+## Project setup
 ```
-cd webapp
 npm install
-npm start
 ```
 
-Voor production build, builds in `build/`:
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
 
+### Compiles and minifies for production
 ```
-npm run-script build 
+npm run build
 ```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
