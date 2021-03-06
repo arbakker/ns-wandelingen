@@ -6,13 +6,15 @@ import Hikes from './components/hikes'
 import Hike from './components/hike'
 
 const routes = [
-  { path: './', component: Hikes },
-  { path: './ns-wandeling/:hikeId', component: Hike, name: 'ns-wandeling' },
-  { path: './:pathMatch(.*)*', redirect: '/' }
+  { path: '/', component: Hikes },
+  { path: '/ns-wandeling/:hikeId', component: Hike, name: 'ns-wandeling' },
+  { path: '/:pathMatch(.*)*', redirect: '/' }
 ]
 //
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(
+    process.env.NODE_ENV === 'production' ? '/ns-wandelingen/' : ''
+  ),
   routes: routes
 })
 createApp(App).use(router).mount('#app')
