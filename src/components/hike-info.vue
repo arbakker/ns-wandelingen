@@ -5,7 +5,7 @@
       <ul>
         <li><a :href="hike.properties.url" rel="noopener" target="_blank"  >Beschrijving</a></li>
         <li v-for="(item, index) in hike.properties.gpxfiles.split(',')" :key="item">
-           <a download :href="'/data/' + item" rel="noopener" target="_blank" >
+           <a download :href="'../data/' + item" rel="noopener" target="_blank" >
              Download GPX bestand {{ hike.properties.gpxfiles.split(',').length > 1 ? index + 1 : '' }}
              </a>
         </li>

@@ -46,7 +46,7 @@ export default {
   methods: {
     getGPXLayer () {
       let urls = this.hike.properties.gpxfiles.split(',')
-      urls = urls.map((x) => `/data/${x}`)
+      urls = urls.map((x) => `../data/${x}`)
       const hikeLayer = new VectorLayer({
         zIndex: 100,
         declutter: true
