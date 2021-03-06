@@ -62,6 +62,8 @@ export default {
     }
   },
   mounted () {
+    console.log('HIKES')
+
     const vectorSource = new VectorSource({
       format: new GeoJSON(),
       attributions: ', wandelingen: <a rel="noopener" target="_blank" href="https://www.ns.nl/dagje-uit/wandelen">© NS-Wandelingen</a>'
@@ -86,7 +88,7 @@ export default {
     // vectorLayer.setStyle(() => this.style.Point)
 
     // this.olMap = map.getMap(this.$refs['map-root'])
-    this.olMap = map.getMap('map')
+    this.olMap = map.getMap(this.$refs['map-root'])
 
     this.olMap.addOverlay(this.overlay)
     this.olMap.addLayer(vectorLayer)

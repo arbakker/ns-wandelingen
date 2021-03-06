@@ -1,7 +1,7 @@
 <template>
   <div id="container">
     <div id="main">
-      <div id="map-2"></div>
+      <div id="map" ref="map-root"></div>
      </div>
          <hike-info v-if="hike" :hike="hike"></hike-info>
           <toggle-color></toggle-color>
@@ -46,7 +46,7 @@ export default {
   methods: {
     getGPXLayer () {
       let urls = this.hike.properties.gpxfiles.split(',')
-      urls = urls.map((x) => `../data/${x}`)
+      urls = urls.map((x) => `./data/${x}`)
       const hikeLayer = new VectorLayer({
         zIndex: 100,
         declutter: true
@@ -106,10 +106,11 @@ export default {
     }
   },
   mounted () {
+    console.log('HIKE')
     this.hike = index.features.find(
       (x) => x.properties.name === this.$route.params.hikeId
     )
-    this.olMap = map.getMap('map-2')
+    this.olMap = map.getMap(this.$refs['map-root'])
     this.gpxLayer = this.getGPXLayer()
     this.olMap.addLayer(this.gpxLayer)
 
