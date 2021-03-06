@@ -1,14 +1,12 @@
-<template>  
+<template>
   <router-view></router-view>
 </template>
 
 <script>
-// import Hikes from './components/hikes.vue'
-
 export default {
   name: 'App',
   components: {
-      }
+  }
 }
 </script>
 
@@ -17,7 +15,7 @@ body{
   margin:0;
   font-family: NS Sans,Segoe UI,Myriad,Verdana,sans-serif;
 }
-#map {
+#map, #map-2{
   width: 100vw;
   height: 100vh;
 }
@@ -25,6 +23,13 @@ body{
   pointer-events: inherit  !important;
 }
 .bw{
-        filter: grayscale(100%);
+    filter: grayscale(100%);
   }
+.ol-scale-line{
+  right: 0.5em !important;
+  left:unset !important;
+}
+.ol-attribution{
+  bottom: 2em !important;
+}
 </style>
