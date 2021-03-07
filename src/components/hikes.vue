@@ -1,7 +1,7 @@
 <template>
   <div id="container">
     <div id="main">
-      <div id="map" ref="map-root"/>
+      <div id="map" ref="map-root-hikes"></div>
       <div class="popup" ref="popup" v-show="showFeatureInfo" >
           <div class="content" v-html="featureInfo"></div>
         </div>
@@ -88,7 +88,7 @@ export default {
     // vectorLayer.setStyle(() => this.style.Point)
 
     // this.olMap = map.getMap(this.$refs['map-root'])
-    this.olMap = map.getMap(this.$refs['map-root'])
+    this.olMap = map.getMap(this.$refs['map-root-hikes'])
 
     this.olMap.addOverlay(this.overlay)
     this.olMap.addLayer(vectorLayer)

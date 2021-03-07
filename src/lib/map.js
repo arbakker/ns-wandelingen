@@ -1,6 +1,6 @@
 // import OSM from 'ol/source/OSM'
 import Map from 'ol/Map'
-import { FullScreen, defaults as defaultControls, ScaleLine } from 'ol/control'
+// import { FullScreen, defaults as defaultControls, ScaleLine } from 'ol/control'
 import { Tile as TileLayer } from 'ol/layer'
 import View from 'ol/View'
 import { fromLonLat } from 'ol/proj'
@@ -11,22 +11,22 @@ import XYZ from 'ol/source/XYZ'
 // const hiDPI = DEVICE_PIXEL_RATIO > 1
 // const tilePixelRatio = hiDPI ? 2 : 1
 // const tiles2x = hiDPI ? '@2x' : ''
-const tileUrl = 'https://tile.thunderforest.com/outdoors/{z}/{x}/{y}@2x.png?apikey=7d5495f3d58a43fc8d42f962bded0cd8'
+// const tileUrl = 'https://tile.thunderforest.com/outdoors/{z}/{x}/{y}@2x.png?apikey=7d5495f3d58a43fc8d42f962bded0cd8'
+const tileUrl = 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
 // console.log('tilePixelRatio', tilePixelRatio)
 const basemapLayer = new TileLayer({
-  className: 'ol-layer basemapLayer bw',
-  preload: Infinity,
+  // className: 'bw basemapLayer',
   source: new XYZ({
     url: tileUrl,
-    tilePixelRatio: 2,
+    // tilePixelRatio: 2,
     attributions: 'achtergrondkaart: <a rel="noopener" target="_blank" href="https://www.openstreetmap.org">© OpenStreetMap contributors</a>'
   })
 })
 const getMap = function (ref) {
   const map = new Map({
-    controls: defaultControls().extend([new FullScreen(), new ScaleLine({
-      units: 'metric'
-    })]),
+    // controls: defaultControls().extend([new FullScreen(), new ScaleLine({
+    //   units: 'metric'
+    // })]),
     target: ref,
     layers: [
       basemapLayer

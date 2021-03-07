@@ -1,7 +1,7 @@
 <template>
   <div id="container">
     <div id="main">
-      <div id="map" ref="map-root"></div>
+      <div id="map" ref="map-root-hike"></div>
      </div>
          <hike-info v-if="hike" :hike="hike"></hike-info>
           <toggle-color></toggle-color>
@@ -37,6 +37,7 @@ export default {
   data: () => ({
     geolocation: null,
     positionFeature: null,
+    geolocationLayer: null,
     olMap: {},
     gpxLayer: null,
     hikeId: '',
@@ -110,7 +111,7 @@ export default {
     this.hike = index.features.find(
       (x) => x.properties.name === this.$route.params.hikeId
     )
-    this.olMap = map.getMap(this.$refs['map-root'])
+    this.olMap = map.getMap(this.$refs['map-root-hike'])
     this.gpxLayer = this.getGPXLayer()
     this.olMap.addLayer(this.gpxLayer)
 
@@ -148,14 +149,16 @@ export default {
       this.positionFeature.setGeometry(
         coordinates ? new Point(coordinates) : null
       )
-    })
-    this.geolocation.setTracking(true)
-    const geolocationLayer = new VectorLayer({
-      source: new VectorSource({
+
+      const newSource = new VectorSource({
         features: [this.positionFeature]
       })
+      this.geolocationLayer.setSource(newSource)
     })
-    this.olMap.addLayer(geolocationLayer)
+    this.geolocation.setTracking(true)
+    this.geolocationLayer = new VectorLayer({
+    })
+    this.olMap.addLayer(this.geolocationLayer)
 
     setTimeout(() => {
       this.olMap.updateSize()
