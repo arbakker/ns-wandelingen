@@ -1,11 +1,9 @@
 <template>
   <div id="container">
-    <div id="main">
-      <div id="map" ref="map-root-hikes"></div>
       <div class="popup" ref="popup" v-show="showFeatureInfo" >
           <div class="content" v-html="featureInfo"></div>
         </div>
-    </div>
+    <div id="map" ref="map-root-hikes"></div>
     <toggle-color></toggle-color>
   </div>
 </template>
@@ -17,7 +15,6 @@ import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import Overlay from 'ol/Overlay'
 import index from '../assets/index.json'
-import { ref, onMounted } from 'vue'
 import map from '../lib/map'
 import ToggleColor from './toggle-color.vue'
 
@@ -26,18 +23,11 @@ export default {
     ToggleColor
   },
   name: 'Hikes',
-  setup () {
-    const popup = ref(null)
-    onMounted(() => {
-      // the DOM element will be assigned to the ref after initial render
-    })
-    return {
-      popup
-    }
+  unmounted () {
+    this.olMap.setTarget(null)
+    this.olMap = null
   },
   data: () => ({
-    geolocation: null,
-    positionFeature: null,
     olMap: {},
     overlay: null,
     featureInfo: '',
@@ -47,7 +37,7 @@ export default {
   methods: {
     closePopup () {
       // Set the position of the pop-up window to undefined, and clear the coordinate data
-      this.overlay.setPosition(undefined)
+      // this.overlay.setPosition(undefined)
       this.showFeatureInfo = false
     },
     labelStyleFunction (feature, resolution) {
@@ -62,8 +52,6 @@ export default {
     }
   },
   mounted () {
-    console.log('HIKES')
-
     const vectorSource = new VectorSource({
       format: new GeoJSON(),
       attributions: ', wandelingen: <a rel="noopener" target="_blank" href="https://www.ns.nl/dagje-uit/wandelen">© NS-Wandelingen</a>'
@@ -85,9 +73,7 @@ export default {
       zIndex: 100,
       declutter: true
     })
-    // vectorLayer.setStyle(() => this.style.Point)
 
-    // this.olMap = map.getMap(this.$refs['map-root'])
     this.olMap = map.getMap(this.$refs['map-root-hikes'])
 
     this.olMap.addOverlay(this.overlay)
@@ -115,7 +101,9 @@ export default {
       if (this.olMap.getView().getResolution() < 50) {
         return
       }
-      if (ft) {
+      const hit = this.olMap.hasFeatureAtPixel(evt.pixel)
+      if (hit) {
+        this.olMap.getViewport().style.cursor = 'pointer'
         const props = ft.getProperties()
         const title = props.title
         if (!title) {
@@ -126,9 +114,9 @@ export default {
         this.featureInfo = `<div><b>${title}</b></div>`
         this.showFeatureInfo = true
       } else {
+        this.olMap.getViewport().style.cursor = ''
         this.showFeatureInfo = false
         this.featureInfo = ''
-        return
       }
       setTimeout(() => {
         // Set the position of the pop-up window
@@ -144,18 +132,6 @@ export default {
 </script>
 
 <style scoped>
-pre[class*="language-"] {
-  text-align: left;
-  padding: 0px;
-  margin: 0px;
-  height: 89vh;
-  overflow: auto;
-}
-#container {
-  height: 93vh;
-  display: flex;
-  flex: 0 0 100%;
-}
 .popup {
   pointer-events: inherit;
   position: relative;

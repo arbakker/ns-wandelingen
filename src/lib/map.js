@@ -1,35 +1,85 @@
 // import OSM from 'ol/source/OSM'
 import Map from 'ol/Map'
-// import { FullScreen, defaults as defaultControls, ScaleLine } from 'ol/control'
-import { Tile as TileLayer } from 'ol/layer'
+import { Attribution, FullScreen, defaults as defaultControls, ScaleLine } from 'ol/control'
+import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer'
 import View from 'ol/View'
 import { fromLonLat } from 'ol/proj'
 import { Circle as CircleStyle, Fill, Stroke, Style, Text } from 'ol/style'
-// import { DEVICE_PIXEL_RATIO } from 'ol/has'
 import XYZ from 'ol/source/XYZ'
+// import OSM from 'ol/source/OSM'
+import Geolocation from 'ol/Geolocation'
+import Feature from 'ol/Feature'
+import Point from 'ol/geom/Point'
+import VectorSource from 'ol/source/Vector'
 
+// use for hidpi tiles
+// import { DEVICE_PIXEL_RATIO } from 'ol/has'
 // const hiDPI = DEVICE_PIXEL_RATIO > 1
 // const tilePixelRatio = hiDPI ? 2 : 1
-// const tiles2x = hiDPI ? '@2x' : ''
-// const tileUrl = 'https://tile.thunderforest.com/outdoors/{z}/{x}/{y}@2x.png?apikey=7d5495f3d58a43fc8d42f962bded0cd8'
-const tileUrl = 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
-// console.log('tilePixelRatio', tilePixelRatio)
+// const urlString = hiDPI ? '@2x' : ''
+
 const basemapLayer = new TileLayer({
-  // className: 'bw basemapLayer',
+  className: 'bw basemapLayer',
+  preload: Infinity,
   source: new XYZ({
-    url: tileUrl,
-    // tilePixelRatio: 2,
+    url: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     attributions: 'achtergrondkaart: <a rel="noopener" target="_blank" href="https://www.openstreetmap.org">© OpenStreetMap contributors</a>'
   })
 })
+
+const geolocation = new Geolocation({
+  // enableHighAccuracy must be set to true to have the heading value.
+  trackingOptions: {
+    enableHighAccuracy: true
+  },
+  projection: 'EPSG:3857'
+})
+geolocation.on('error', function (error) {
+  const info = document.getElementById('info')
+  info.innerHTML = error.message
+  info.style.display = ''
+})
+const positionFeature = new Feature()
+positionFeature.setStyle(
+  new Style({
+    image: new CircleStyle({
+      fill: new Fill({
+        color: '#2BC0F1'
+      }),
+      radius: 8,
+      stroke: new Stroke({
+        color: '#ffffff',
+        width: 2
+      })
+    })
+  })
+)
+geolocation.on('change:position', () => {
+  const coordinates = geolocation.getPosition()
+  positionFeature.setGeometry(
+    coordinates ? new Point(coordinates) : null
+  )
+  const newSource = new VectorSource({
+    features: [positionFeature]
+  })
+  geolocationLayer.setSource(newSource)
+})
+geolocation.setTracking(true)
+const geolocationLayer = new VectorLayer({})
+
+const attribution = new Attribution({
+  collapsible: true
+})
+attribution.setCollapsed(true)
 const getMap = function (ref) {
   const map = new Map({
-    // controls: defaultControls().extend([new FullScreen(), new ScaleLine({
-    //   units: 'metric'
-    // })]),
+    controls: defaultControls({ attribution: false }).extend([attribution, new FullScreen(), new ScaleLine({
+      units: 'metric'
+    })]),
     target: ref,
     layers: [
-      basemapLayer
+      basemapLayer,
+      geolocationLayer
     ],
     view: new View({
       zoom: 8,
@@ -57,7 +107,7 @@ const styles = {
     stroke: new Stroke({
       color: symbolColor,
       lineDash: [2, 6, 6],
-      width: 4
+      width: 3
     })
   }),
   MultiLineString: new Style({
@@ -65,7 +115,7 @@ const styles = {
       color: symbolColor,
       lineDash: [2, 6, 6],
       lineCap: 'square',
-      width: 4
+      width: 3
     })
   }),
   Label: new Style({

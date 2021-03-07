@@ -7,7 +7,7 @@ import Hike from './components/hike'
 
 const routes = [
   { path: '/', component: Hikes, name: 'ns-wandelingen' },
-  { path: '/ns-wandeling/:hikeId', component: Hike, name: 'ns-wandeling' },
+  { path: '/wandeling/:hikeId', component: Hike, name: 'ns-wandeling' },
   { path: '/:pathMatch(.*)*', redirect: '/' }
 ]
 //

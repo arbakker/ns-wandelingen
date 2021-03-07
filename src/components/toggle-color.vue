@@ -2,7 +2,7 @@
   <div id="toggle-colour">
     <label class="switch">
       <input type="checkbox" v-model="colour" />
-      <span class="slider round" :title="colour ? 'Kaart grijswaardes' : 'Kaart kleur'"></span>
+      <span class="slider round" :title="colour ? 'Kaart in grijswaardes' : 'Kaart in kleur'"></span>
     </label>
   </div>
 </template>

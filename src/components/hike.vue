@@ -1,30 +1,22 @@
 <template>
   <div id="container">
-    <div id="main">
-      <div id="map" ref="map-root-hike"></div>
-     </div>
-         <hike-info v-if="hike" :hike="hike"></hike-info>
-          <toggle-color></toggle-color>
+    <div id="map" ref="map"></div>
+    <hike-info v-if="hike" :hike="hike"></hike-info>
+    <toggle-color></toggle-color>
   </div>
 </template>
 
 <script>
-
 import GPX from 'ol/format/GPX'
 import { Vector as VectorLayer } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import axios from 'axios'
 import { all } from 'ol/loadingstrategy'
-import Geolocation from 'ol/Geolocation'
-import Feature from 'ol/Feature'
-import Point from 'ol/geom/Point'
-import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style'
 
 import index from '../assets/index.json'
 import map from '../lib/map'
 import HikeInfo from './hike-info.vue'
 import ToggleColor from './toggle-color.vue'
-import { DEVICE_PIXEL_RATIO } from 'ol/has'
 
 export default {
   components: {
@@ -32,12 +24,8 @@ export default {
     ToggleColor
   },
   name: 'Hike',
-  props: {
-  },
+  props: {},
   data: () => ({
-    geolocation: null,
-    positionFeature: null,
-    geolocationLayer: null,
     olMap: {},
     gpxLayer: null,
     hikeId: '',
@@ -54,8 +42,11 @@ export default {
       })
       const gpxSource = new VectorSource({
         attributions:
-          ', wandeling: <a  rel="noopener" target="_blank" href="' + this.hike.properties.url +
-          '">© ' + this.hike.properties.title + '</a>',
+          ', wandeling: <a  rel="noopener" target="_blank" href="' +
+          this.hike.properties.url +
+          '">© ' +
+          this.hike.properties.title +
+          '</a>',
         format: new GPX(),
         loader: () => {
           async function getAllData (urls) {
@@ -99,67 +90,27 @@ export default {
       hikeLayer.setStyle((feature, resolution) => {
         if (resolution < 10) {
           this.style.Label.getText().setText(feature.get('name'))
-          return [this.style[feature.getGeometry().getType()], this.style.Label]
+          return [
+            this.style[feature.getGeometry().getType()],
+            this.style.Label
+          ]
         }
         return [this.style[feature.getGeometry().getType()]]
       })
       return hikeLayer
     }
   },
+  unmounted () {
+    this.olMap.setTarget(null)
+    this.olMap = null
+  },
   mounted () {
-    console.log('HIKE')
     this.hike = index.features.find(
       (x) => x.properties.name === this.$route.params.hikeId
     )
-    this.olMap = map.getMap(this.$refs['map-root-hike'])
+    this.olMap = map.getMap(this.$refs.map)
     this.gpxLayer = this.getGPXLayer()
     this.olMap.addLayer(this.gpxLayer)
-
-    this.geolocation = new Geolocation({
-    // enableHighAccuracy must be set to true to have the heading value.
-      trackingOptions: {
-        enableHighAccuracy: false
-      },
-      projection: this.olMap.getView().getProjection()
-    })
-    this.geolocation.on('error', function (error) {
-      const info = document.getElementById('info')
-      info.innerHTML = error.message
-      info.style.display = ''
-    })
-    this.positionFeature = new Feature()
-    this.positionFeature.setStyle(
-      new Style({
-        image: new CircleStyle({
-          fill: new Fill({
-            color: '#2BC0F1'
-          }),
-          radius: 8,
-          stroke: new Stroke({
-            color: '#ffffff',
-            width: 2
-          })
-        })
-      })
-    )
-    this.geolocation.on('change:position', () => {
-      console.log('changepos')
-      console.log(DEVICE_PIXEL_RATIO)
-      const coordinates = this.geolocation.getPosition()
-      this.positionFeature.setGeometry(
-        coordinates ? new Point(coordinates) : null
-      )
-
-      const newSource = new VectorSource({
-        features: [this.positionFeature]
-      })
-      this.geolocationLayer.setSource(newSource)
-    })
-    this.geolocation.setTracking(true)
-    this.geolocationLayer = new VectorLayer({
-    })
-    this.olMap.addLayer(this.geolocationLayer)
-
     setTimeout(() => {
       this.olMap.updateSize()
     }, 200)
@@ -168,38 +119,4 @@ export default {
 </script>
 
 <style scoped>
-pre[class*="language-"] {
-  text-align: left;
-  padding: 0px;
-  margin: 0px;
-  height: 89vh;
-  overflow: auto;
-}
-#container {
-  height: 93vh;
-  display: flex;
-  flex: 0 0 100%;
-}
-
-#meta {
-  width: 100%;
-  overflow: auto;
-}
-
-#capbar {
-  height: 4vh;
-  text-align: left;
-}
-
-#capbar button {
-  margin: 0.3em;
-}
-#capbar button {
-  height: 2em;
-}
-#legend {
-  padding: 0.2em;
-  border: lightgrey dotted 1px;
-}
-
 </style>
