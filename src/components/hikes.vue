@@ -5,6 +5,13 @@
         </div>
     <div id="map" ref="map-root-hikes"></div>
     <toggle-color></toggle-color>
+    <div id="hike-info" class="ol-control" v-if="updated">
+      <h2>NS-Wandelingen</h2>
+      <p>Updated: {{updated }}</p>
+      <p>
+         © <a rel="noopener" target="_blank" href="https://www.ns.nl/dagje-uit/wandelen">NS</a>
+      </p>
+    </div>
   </div>
 </template>
 
@@ -32,7 +39,8 @@ export default {
     overlay: null,
     featureInfo: '',
     showFeatureInfo: false,
-    style: map.styles
+    style: map.styles,
+    updated: ''
   }),
   methods: {
     closePopup () {
@@ -52,16 +60,17 @@ export default {
     }
   },
   mounted () {
+    this.updated = index['@context'].updated
     const vectorSource = new VectorSource({
-      format: new GeoJSON(),
-      attributions: ', wandelingen: <a rel="noopener" target="_blank" href="https://www.ns.nl/dagje-uit/wandelen">© NS-Wandelingen</a>'
+      format: new GeoJSON()
+      // attributions: ', wandelingen:'
     })
     const fts = vectorSource
       .getFormat()
       .readFeatures(index, { dataProjection: 'EPSG:3857' })
     vectorSource.addFeatures(fts)
     this.overlay = new Overlay({
-      element: this.popup, // popup tag, in html
+      element: this.$refs.popup, // popup tag, in html
       autoPan: true, // If the pop-up window is at the edge of the base image, the base image will move
       autoPanAnimation: {
         // Basemap moving animation
@@ -132,6 +141,13 @@ export default {
 </script>
 
 <style scoped>
+#hike-info {
+  position: absolute;
+  left: 0.5em;
+  bottom: 0.5em;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
 .popup {
   pointer-events: inherit;
   position: relative;
