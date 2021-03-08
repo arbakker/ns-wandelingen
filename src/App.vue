@@ -11,13 +11,17 @@ export default {
 </script>
 
 <style>
+html, body, #app {
+    height: 100%;
+}
+
 body{
   margin:0;
   font-family: NS Sans,Segoe UI,Myriad,Verdana,sans-serif;
 }
-#map, #map-2{
+#container, #map{
   width: 100vw;
-  height: 100vh;
+  height: 100%;
 }
 .ol-overlay-container{
   pointer-events: inherit  !important;
@@ -28,8 +32,9 @@ body{
 .ol-scale-line{
   right: 0.5em !important;
   left:unset !important;
+  bottom: 2.7em !important;
 }
-.ol-attribution{
+/* .ol-attribution{
   bottom: 2em !important;
-}
+} */
 </style>

@@ -41,12 +41,7 @@ export default {
         declutter: true
       })
       const gpxSource = new VectorSource({
-        // attributions:
-        //   ', wandeling: <a  rel="noopener" target="_blank" href="' +
-        //   this.hike.properties.url +
-        //   '">© ' +
-        //   this.hike.properties.title +
-        //   '</a>',
+        attribution: ', wandelingen: © <a rel="noopener" target="_blank" href="https://www.ns.nl/dagje-uit/wandelen">NS-Wandelingen</a>',
         format: new GPX(),
         loader: () => {
           async function getAllData (urls) {

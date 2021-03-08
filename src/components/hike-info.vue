@@ -3,7 +3,7 @@
     <h2>{{hike.properties.title}}</h2>
     <p>
       <ul>
-        <li><a :href="hike.properties.url" rel="noopener" target="_blank"  >Beschrijving</a></li>
+        <li><a :href="hike.properties.url" rel="noopener" target="_blank" >Wandeling op de NS website</a></li>
         <li v-for="(item, index) in hike.properties.gpxfiles.split(',')" :key="item">
            <a download :href="'./data/' + item" rel="noopener" target="_blank" >
              Download GPX bestand {{ hike.properties.gpxfiles.split(',').length > 1 ? index + 1 : '' }}
@@ -22,7 +22,6 @@ export default {
   },
   methods: {},
   mounted () {
-    console.log(this.hike)
   }
 }
 </script>

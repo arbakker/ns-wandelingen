@@ -7,10 +7,7 @@
     <toggle-color></toggle-color>
     <div id="hike-info" class="ol-control" v-if="updated">
       <h2>NS-Wandelingen</h2>
-      <p>Updated: {{updated }}</p>
-      <p>
-         © <a rel="noopener" target="_blank" href="https://www.ns.nl/dagje-uit/wandelen">NS</a>
-      </p>
+      <p>Laatste update: {{updated }}</p>
     </div>
   </div>
 </template>
@@ -61,10 +58,12 @@ export default {
   },
   mounted () {
     this.updated = index['@context'].updated
+    const attribution = ', wandelingen: © <a rel="noopener" target="_blank" href="https://www.ns.nl/dagje-uit/wandelen">NS-Wandelingen</a>'
     const vectorSource = new VectorSource({
-      format: new GeoJSON()
-      // attributions: ', wandelingen:'
+      format: new GeoJSON(),
+      attributions: attribution
     })
+
     const fts = vectorSource
       .getFormat()
       .readFeatures(index, { dataProjection: 'EPSG:3857' })
@@ -91,7 +90,6 @@ export default {
     vectorLayer.setStyle(this.styleFunction)
 
     this.olMap.on('singleclick', (evt) => {
-      console.log('singleclick', evt)
       // const hdms = toStringHDMS(toLonLat(coordinate)); // Convert coordinate format
       const fts = this.olMap.getFeaturesAtPixel(evt.pixel)
       const ft = fts.length > 0 ? fts[0] : null
@@ -127,6 +125,7 @@ export default {
         this.showFeatureInfo = false
         this.featureInfo = ''
       }
+
       setTimeout(() => {
         // Set the position of the pop-up window
         // Set the timer here, otherwise the pop-up window will appear for the first time, and the base map will be off-track
@@ -192,4 +191,9 @@ export default {
   .styled-table tr td:nth-child(1){
     font-weight: 600;
   }
+  @media only screen and (max-width: 600px) {
+  #hike-info  {
+    display: none;
+  }
+}
 </style>

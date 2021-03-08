@@ -17,11 +17,9 @@ export default {
   }),
   methods: {},
   mounted () {
-    console.log(this.hike)
   },
   watch: {
     colour: function () {
-      console.log(this.colour)
       if (this.colour) {
         document.getElementsByClassName('basemapLayer')[0].classList.remove('bw')
       } else {
