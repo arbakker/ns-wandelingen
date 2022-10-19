@@ -7,7 +7,7 @@
     <toggle-color></toggle-color>
     <div id="hike-info" class="ol-control" v-if="updated">
       <h2>NS-Wandelingen</h2>
-      <p>Laatste update: {{updated }}</p>
+      <p>{{ count }} wandelingen<br/>laatste update: {{ updated }}</p>
     </div>
   </div>
 </template>
@@ -37,7 +37,8 @@ export default {
     featureInfo: '',
     showFeatureInfo: false,
     style: map.styles,
-    updated: ''
+    updated: '',
+    count: ''
   }),
   methods: {
     closePopup () {
@@ -58,6 +59,8 @@ export default {
   },
   mounted () {
     this.updated = index['@context'].updated
+    this.count = index['@context'].count
+
     const attribution = ', wandelingen: © <a rel="noopener" target="_blank" href="https://www.ns.nl/dagje-uit/wandelen">NS-Wandelingen</a>'
     const vectorSource = new VectorSource({
       format: new GeoJSON(),

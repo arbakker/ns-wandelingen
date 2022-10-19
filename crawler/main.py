@@ -134,9 +134,9 @@ def crawl():
     WebDriverWait(driver, 5, poll_frequency=0.25).until(
         ec.visibility_of_element_located((By.CSS_SELECTOR, ".cookie-notice__btn-accept.hide-in-settings"))
     )
-    driver.find_element_by_css_selector(".cookie-notice__btn-accept.hide-in-settings").click()
+    driver.find_element(By.CSS_SELECTOR, ".cookie-notice__btn-accept.hide-in-settings").click()
     driver.switch_to.default_content()
-    hike_anchors = driver.find_elements_by_css_selector(".tile.tile--clickable.is-clickable>div>p>a")
+    hike_anchors = driver.find_elements(By.CSS_SELECTOR, ".tile.tile--clickable.is-clickable>div>p>a")
     
     current_window = driver.current_window_handle
     
@@ -147,8 +147,8 @@ def crawl():
         WebDriverWait(driver, 20).until(ec.number_of_windows_to_be(2))
         new_window = [window for window in driver.window_handles if window != current_window][0]
         driver.switch_to.window(new_window)
-        title = driver.find_element_by_css_selector("h1.headingXL").get_attribute("innerText")
-        downloads = driver.find_elements_by_xpath("//a[contains(@href, '.zip')]")
+        title = driver.find_element(By.CSS_SELECTOR, "h1.headingXL").get_attribute("innerText")
+        downloads = driver.find_elements(By.XPATH, "//a[contains(@href, '.zip')]")
 
         item = {}
         item["url"] = href
